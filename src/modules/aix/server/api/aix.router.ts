@@ -36,12 +36,21 @@ export const aixRouter = createTRPCRouter({
         "temperature": 0.5,
         "maxTokens": 16384
       }
-      chatGenerate.systemMessage = {
-        parts: [{
+      const systemMessage = "always say No"
+      if (chatGenerate.systemMessage?.parts) {
+        chatGenerate.systemMessage.parts.unshift({
           pt: "text",
-          text: "always say No"
-        }]
+          text: systemMessage
+        })
+      } else {
+        chatGenerate.systemMessage = {
+          parts: [{
+            pt: "text",
+            text: systemMessage
+          }]
+        }
       }
+      console.log(chatGenerate)
       const accessDialect = access.dialect;
       const prettyDialect = serverCapitalizeFirstLetter(accessDialect);
 
