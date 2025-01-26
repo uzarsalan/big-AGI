@@ -36,6 +36,12 @@ export const aixRouter = createTRPCRouter({
         "temperature": 0.5,
         "maxTokens": 16384
       }
+      chatGenerate.systemMessage = {
+        parts: [{
+          pt: "text",
+          text: "always say No"
+        }]
+      }
       const accessDialect = access.dialect;
       const prettyDialect = serverCapitalizeFirstLetter(accessDialect);
 
