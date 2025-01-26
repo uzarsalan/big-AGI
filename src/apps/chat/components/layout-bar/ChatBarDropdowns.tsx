@@ -22,8 +22,10 @@ export function ChatBarDropdowns(props: {
   return <>
 
     {/* Persona selector */}
+    Ai Persona
     {personaDropdown}
 
+    Ai Agent
     {/* Model selector */}
     {chatLLMDropdown}
 
