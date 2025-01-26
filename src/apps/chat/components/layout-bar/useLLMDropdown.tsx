@@ -196,6 +196,7 @@ function LLMDropdown(props: {
       onChange={handleChatLLMChange}
       placeholder={props.placeholder || 'Models …'}
       prependOption={llmDropdownPrependOptions}
+      disableAllExceptFirst
       // appendOption={llmDropdownAppendOptions}
       // activeEndDecorator={llmDropdownButton}
     />

@@ -4,19 +4,17 @@ import type { SelectSlotsAndSlotProps } from '@mui/joy/Select/SelectProps';
 import { Box, ListDivider, listItemButtonClasses, ListItemDecorator, Option, optionClasses, Select, selectClasses, Typography } from '@mui/joy';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-
 // set to true to enable the dense mode, which is default in the rest of the app
 const useDenseDropdowns = false;
 // set to false to use normal icons - check with similar menus
 const useBigIcons = true;
-
 
 const selectSlotProps: SelectSlotsAndSlotProps<false>['slotProps'] = {
   root: {
     sx: {
       backgroundColor: 'transparent',
       // minWidth: selectMinWidth, // 160
-      maxWidth: 'calc(100dvw - 4.5rem)', /* 36px * 2 buttons */
+      maxWidth: 'calc(100dvw - 4.5rem)' /* 36px * 2 buttons */,
     },
   },
   button: {
@@ -44,9 +42,7 @@ const selectSlotProps: SelectSlotsAndSlotProps<false>['slotProps'] = {
     variant: 'outlined',
     sx: {
       // in sync with CloseableMenu
-      '--ListItem-minHeight': useDenseDropdowns
-        ? '2.25rem' /* 2.25 is the default */
-        : '2.75rem', /* we enlarge the default  */
+      '--ListItem-minHeight': useDenseDropdowns ? '2.25rem' /* 2.25 is the default */ : '2.75rem' /* we enlarge the default  */,
       ...(useBigIcons && {
         '--Icon-fontSize': 'var(--joy-fontSize-xl2)',
         // '--ListItemDecorator-size': '2.75rem',
@@ -72,133 +68,140 @@ const selectSlotProps: SelectSlotsAndSlotProps<false>['slotProps'] = {
   },
 };
 
-
-export type OptimaDropdownItems = Record<string, {
-  title: string,
-  symbol?: string,
-  type?: 'separator'
-  icon?: React.ReactNode,
-}>;
-
+export type OptimaDropdownItems = Record<
+  string,
+  {
+    title: string;
+    symbol?: string;
+    type?: 'separator';
+    icon?: React.ReactNode;
+  }
+>;
 
 export const OptimaBarDropdownMemo = React.memo(React.forwardRef(OptimaBarDropdown));
 
 export type OptimaBarControlMethods = {
-  openListbox: () => void,
+  openListbox: () => void;
   // closeListbox: () => void,
 };
 
 /**
  * A Select component that blends-in nicely (cleaner, easier to the eyes)
  */
-function OptimaBarDropdown<TValue extends string>(props: {
-  // required
-  items: OptimaDropdownItems,
-  value: TValue | null,
-  onChange: (value: TValue | null) => void,
-  // optional
-  activeEndDecorator?: React.JSX.Element,
-  prependOption?: React.JSX.Element
-  appendOption?: React.JSX.Element,
-  placeholder?: string,
-  showSymbols?: boolean,
-}, ref: React.Ref<OptimaBarControlMethods>) {
-
+function OptimaBarDropdown<TValue extends string>(
+  props: {
+    // required
+    items: OptimaDropdownItems;
+    value: TValue | null;
+    onChange: (value: TValue | null) => void;
+    // optional
+    activeEndDecorator?: React.JSX.Element;
+    prependOption?: React.JSX.Element;
+    appendOption?: React.JSX.Element;
+    placeholder?: string;
+    showSymbols?: boolean;
+    disableAllExceptFirst?: boolean;
+  },
+  ref: React.Ref<OptimaBarControlMethods>,
+) {
   // state
   const [listboxOpen, setListboxOpen] = React.useState(false);
 
   // Expose control methods via the ref
-  React.useImperativeHandle(ref, () => ({
-    openListbox: () => {
-      setListboxOpen(true);
-    },
-    // closeListbox: () => {
-    //   setListboxOpen(false);
-    // },
-  }), []);
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      openListbox: () => {
+        setListboxOpen(true);
+      },
+      // closeListbox: () => {
+      //   setListboxOpen(false);
+      // },
+    }),
+    [],
+  );
 
   // derived state
-  const { onChange } = props;
+  const { onChange, disableAllExceptFirst } = props;
 
-  const handleOnChange = React.useCallback((_event: any, value: TValue | null) => {
-    onChange(value);
-  }, [onChange]);
+  const handleOnChange = React.useCallback(
+    (_event: any, value: TValue | null) => {
+      onChange(value);
+    },
+    [onChange],
+  );
 
   const itemsKeys = Object.keys(props.items);
 
   return (
     <Select
-      variant='plain'
+      variant="plain"
       value={props.value}
       onChange={handleOnChange}
       placeholder={props.placeholder}
       listboxOpen={listboxOpen}
       onListboxOpenChange={(isOpen) => {
-        if (isOpen !== listboxOpen)
-          setListboxOpen(isOpen);
+        if (isOpen !== listboxOpen) setListboxOpen(isOpen);
       }}
       indicator={<KeyboardArrowDownIcon />}
       slotProps={selectSlotProps}
     >
-
       {/* Prepender */}
       {!!props.prependOption && <Box sx={{ height: 'var(--ListDivider-gap)' }} />}
       {props.prependOption}
       {/*{!!props.prependOption && Object.keys(props.items).length >= 1 && <ListDivider sx={{ my: 0 }} />}*/}
 
       {/* Scrollable Items list*/}
-      {(itemsKeys.length > 0) && <Box
-        sx={{
-          overflow: 'auto',
-          paddingBlock: 'var(--ListDivider-gap)',
-        }}
-      >
-        {itemsKeys.map((_itemKey: string, idx: number) => {
-          const _item = props.items[_itemKey];
-          const isActive = _itemKey === props.value;
+      {itemsKeys.length > 0 && (
+        <Box
+          sx={{
+            overflow: 'auto',
+            paddingBlock: 'var(--ListDivider-gap)',
+          }}
+        >
+          {itemsKeys.map((_itemKey: string, idx: number) => {
+            const _item = props.items[_itemKey];
+            const isActive = _itemKey === props.value;
 
-          // Label & Decorators
-          let label = _item.title || '';
-          let decorator: React.ReactNode = null;
-          if (props.showSymbols) {
-            if (_item.icon) {
-              decorator = <ListItemDecorator>{_item.icon}</ListItemDecorator>;
-            } else if (_item.symbol !== undefined) {
-              decorator = <ListItemDecorator sx={{ fontSize: 'xl' }}>{_item.symbol || ''}</ListItemDecorator>;
-              if (_item.symbol)
-                label = `${_item.symbol} ${label}`;
+            // Label & Decorators
+            let label = _item.title || '';
+            let decorator: React.ReactNode = null;
+            if (props.showSymbols) {
+              if (_item.icon) {
+                decorator = <ListItemDecorator>{_item.icon}</ListItemDecorator>;
+              } else if (_item.symbol !== undefined) {
+                decorator = <ListItemDecorator sx={{ fontSize: 'xl' }}>{_item.symbol || ''}</ListItemDecorator>;
+                if (_item.symbol) label = `${_item.symbol} ${label}`;
+              }
             }
-          }
 
-          return _item.type === 'separator' ? (
-            <ListDivider key={_itemKey || `sep-${idx}`}>
-              {/*<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, '--Icon-fontSize': 'var(--joy-fontSize-lg)' }}>*/}
-              {/*{_item.icon} */}
-              {_item.title}
-              {/*</Box>*/}
-            </ListDivider>
-          ) : (
-            <Option key={_itemKey} value={_itemKey} label={label} disabled={!!idx}>
-              {/* Icon / Symbol */}
-              {decorator}
-
-              {/* Text */}
-              <Typography className='agi-ellipsize'>
+            return _item.type === 'separator' ? (
+              <ListDivider key={_itemKey || `sep-${idx}`}>
+                {/*<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, '--Icon-fontSize': 'var(--joy-fontSize-lg)' }}>*/}
+                {/*{_item.icon} */}
                 {_item.title}
-              </Typography>
+                {/*</Box>*/}
+              </ListDivider>
+            ) : (
+              <Option key={_itemKey} value={_itemKey} label={label} disabled={disableAllExceptFirst && !!idx}>
+                {/* Icon / Symbol */}
+                {decorator}
 
-              {/* Optional End Decorator */}
-              {isActive && props.activeEndDecorator}
-            </Option>
-          );
-        })}
-      </Box>}
+                {/* Text */}
+                <Typography className="agi-ellipsize">{_item.title}</Typography>
+
+                {/* Optional End Decorator */}
+                {isActive && props.activeEndDecorator}
+              </Option>
+            );
+          })}
+        </Box>
+      )}
 
       {/* Appender */}
       {!!props.appendOption && Object.keys(props.items).length >= 1 && <ListDivider sx={{ my: 0 }} />}
       {props.appendOption}
       {/*{!!props.appendOption && <Box sx={{ height: 'var(--ListDivider-gap)' }} />}*/}
-
     </Select>
   );
 }
