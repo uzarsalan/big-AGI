@@ -178,7 +178,7 @@ function OptimaBarDropdown<TValue extends string>(props: {
               {/*</Box>*/}
             </ListDivider>
           ) : (
-            <Option key={_itemKey} value={_itemKey} label={label}>
+            <Option key={_itemKey} value={_itemKey} label={label} disabled={!!idx}>
               {/* Icon / Symbol */}
               {decorator}
 

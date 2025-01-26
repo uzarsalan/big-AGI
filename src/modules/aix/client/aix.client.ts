@@ -560,7 +560,7 @@ async function _aixChatGenerateContent_LL(
     // tRPC Aix Chat Generation (streaming) API - inside the try block for deployment path errors
     const particles = await apiStream.aix.chatGenerateContent.mutate({
       access: aixAccess,
-      model: aixModel,
+      // model: aixModel,
       chatGenerate: aixChatGenerate,
       context: aixContext,
       streaming: getLabsDevNoStreaming() ? false : aixStreaming, // [DEV] disable streaming if set in the UX (testing)

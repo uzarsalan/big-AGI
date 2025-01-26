@@ -63,7 +63,8 @@ export const useModelsStore = create<LlmsState & LlmsActions>()(persist(
     // actions
 
     setChatLLMId: (id: DLLMId | null) =>
-      set(state => _heuristicUpdateSelectedLLMs(state.llms, id, state.fastLLMId)),
+      set(state => ({ chatLLMId: id })),
+    // set(state => _heuristicUpdateSelectedLLMs(state.llms, id, state.fastLLMId)),
 
     setFastLLMId: (id: DLLMId | null) =>
       set(state => _heuristicUpdateSelectedLLMs(state.llms, state.chatLLMId, id)),
@@ -395,10 +396,13 @@ function _heuristicUpdateSelectedLLMs(allLlms: DLLM[], chatLlmId: DLLMId | null,
   }
 
   // default Chat: top vendor by Elo, top model
-  if (!chatLlmId || !allLlms.find(llm => llm.id === chatLlmId)) {
-    const vendors = cachedGrouped();
-    chatLlmId = vendors.length ? vendors[0].llmsByElo[0].id : null;
-  }
+  // if (!chatLlmId || !allLlms.find(llm => llm.id === chatLlmId)) {
+  //   const vendors = cachedGrouped();
+  //   chatLlmId = vendors.length ? vendors[0].llmsByElo[0].id : null;
+  // }
+
+
+  chatLlmId = 'openai-nexus-ai-agent'
 
   // default Fast: vendors by Elo, lowest cost (if available)
   if (!fastLlmId || !allLlms.find(llm => llm.id === fastLlmId)) {

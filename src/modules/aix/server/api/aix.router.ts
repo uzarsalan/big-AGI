@@ -19,7 +19,7 @@ export const aixRouter = createTRPCRouter({
   chatGenerateContent: publicProcedure
     .input(z.object({
       access: AixWire_API.Access_schema,
-      model: AixWire_API.Model_schema,
+      model: AixWire_API.Model_schema.optional(),
       chatGenerate: AixWire_API_ChatContentGenerate.Request_schema,
       context: AixWire_API.ContextChatGenerate_schema,
       streaming: z.boolean(),
@@ -30,7 +30,12 @@ export const aixRouter = createTRPCRouter({
 
       // Intake derived state
       const intakeAbortSignal = ctx.reqSignal;
-      const { access, model, chatGenerate, streaming, connectionOptions } = input;
+      let { access, model, chatGenerate, streaming, connectionOptions } = input;
+      model = {
+        "id": "gpt-4o-2024-11-20",
+        "temperature": 0.5,
+        "maxTokens": 16384
+      }
       const accessDialect = access.dialect;
       const prettyDialect = serverCapitalizeFirstLetter(accessDialect);
 

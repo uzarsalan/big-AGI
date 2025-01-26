@@ -150,8 +150,8 @@ export function PersonaSelector(props: {
 
   // derived state
 
-  const isCustomPurpose = systemPurposeId === 'Custom';
-  const isYouTubeTranscriber = systemPurposeId === 'YouTubeTranscriber';
+  // const isCustomPurpose = systemPurposeId === 'Custom';
+  // const isYouTubeTranscriber = systemPurposeId === 'YouTubeTranscriber';
 
   const { selectedPurpose, fourExamples } = React.useMemo(() => {
     const selectedPurpose: SystemPurposeData | null = systemPurposeId ? (SystemPurposes[systemPurposeId] ?? null) : null;
@@ -184,18 +184,18 @@ export function PersonaSelector(props: {
   }, [props.conversationId]);
 
 
-  const handleCustomSystemMessageChange = React.useCallback((v: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    // TODO: persist this change? Right now it's reset every time.
-    //       maybe we shall have a "save" button just save on a state to persist between sessions
-    SystemPurposes['Custom'].systemMessage = v.target.value;
-  }, []);
+  // const handleCustomSystemMessageChange = React.useCallback((v: React.ChangeEvent<HTMLTextAreaElement>): void => {
+  //   // TODO: persist this change? Right now it's reset every time.
+  //   //       maybe we shall have a "save" button just save on a state to persist between sessions
+  //   SystemPurposes['Custom'].systemMessage = v.target.value;
+  // }, []);
 
-  const handleSwitchToCustom = React.useCallback((customText: string) => {
-    if (setSystemPurposeId) {
-      SystemPurposes['Custom'].systemMessage = customText;
-      setSystemPurposeId(props.conversationId, 'Custom');
-    }
-  }, [props.conversationId, setSystemPurposeId]);
+  // const handleSwitchToCustom = React.useCallback((customText: string) => {
+  //   if (setSystemPurposeId) {
+  //     SystemPurposes['Custom'].systemMessage = customText;
+  //     setSystemPurposeId(props.conversationId, 'Custom');
+  //   }
+  // }, [props.conversationId, setSystemPurposeId]);
 
   const toggleEditMode = React.useCallback(() => setEditMode(on => !on), []);
 
@@ -315,7 +315,7 @@ export function PersonaSelector(props: {
         })}
 
         {/* Persona Creator Tile */}
-        {(editMode || !hidePersonaCreator) && (
+        {/* {(editMode || !hidePersonaCreator) && (
           <Tile
             text='Persona Creator'
             symbol='🎭'
@@ -329,7 +329,7 @@ export function PersonaSelector(props: {
               backgroundColor: 'neutral.softDisabledBg',
             }}
           />
-        )}
+        )} */}
 
 
         {/* [row -3] Description */}
@@ -345,13 +345,13 @@ export function PersonaSelector(props: {
           {/* Examples/Prompt Toggles */}
           <Box sx={{ display: 'flex', gap: 1 }}>
             {fourExamples && showExamplescomponent}
-            {!isCustomPurpose && showPromptComponent}
+            {/* {!isCustomPurpose && showPromptComponent} */}
           </Box>
 
         </Box>
 
         {/* [row -3] Example incipits */}
-        {systemPurposeId !== 'Custom' && (
+        {/* {systemPurposeId !== 'Custom' && (
           <ExpanderControlledBox expanded={showExamples || (!isCustomPurpose && showPrompt)} sx={{ gridColumn: '1 / -1', pt: 1 }}>
             {showExamples && (
               <List
@@ -378,7 +378,6 @@ export function PersonaSelector(props: {
                   >
                     <ListItemButton onClick={() => props.runExample(example)} sx={{ justifyContent: 'space-between', borderRadius: 'md' }}>
                       <Typography level='body-sm'>
-                        {/* Icon 📁 when the .action is 'require-data-attachment' */}
                         {(typeof example === 'object' && example.action === 'require-data-attachment') ? '📁 ' : ''}
                         {(typeof example === 'string') ? example : example.prompt}
                       </Typography>
@@ -399,7 +398,7 @@ export function PersonaSelector(props: {
                       variant='plain' color='neutral' size='sm'
                       endDecorator={<EditNoteIcon />}
                       onClick={() => handleSwitchToCustom(bareBonesPromptMixer(selectedPurpose?.systemMessage || 'No system message available', chatLLM?.id))}
-                      sx={{ ml: 'auto', my: '-0.25rem' /* absorb the button padding */ }}
+                      sx={{ ml: 'auto', my: '-0.25rem' }}
                     >
                       Custom
                     </Button>
@@ -418,10 +417,10 @@ export function PersonaSelector(props: {
               </Card>
             )}
           </ExpanderControlledBox>
-        )}
+        )} */}
 
         {/* [row -1] Custom Prompt box */}
-        {systemPurposeId === 'Custom' && (
+        {/* {systemPurposeId === 'Custom' && (
           <Textarea
             autoFocus
             variant='outlined'
@@ -445,17 +444,17 @@ export function PersonaSelector(props: {
               lineHeight: lineHeightTextareaMd,
             }}
           />
-        )}
+        )} */}
 
         {/* [row -1] YouTube URL */}
-        {isYouTubeTranscriber && (
+        {/* {isYouTubeTranscriber && (
           <YouTubeURLInput
             onSubmit={handleAppendTranscriptAsMessage}
             sx={{
               gridColumn: '1 / -1',
             }}
           />
-        )}
+        )} */}
 
       </Box>
 
