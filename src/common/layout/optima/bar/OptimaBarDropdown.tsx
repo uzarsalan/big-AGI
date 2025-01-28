@@ -100,7 +100,6 @@ function OptimaBarDropdown<TValue extends string>(
     appendOption?: React.JSX.Element;
     placeholder?: string;
     showSymbols?: boolean;
-    disableAllExceptFirst?: boolean;
   },
   ref: React.Ref<OptimaBarControlMethods>,
 ) {
@@ -122,7 +121,7 @@ function OptimaBarDropdown<TValue extends string>(
   );
 
   // derived state
-  const { onChange, disableAllExceptFirst } = props;
+  const { onChange } = props;
 
   const handleOnChange = React.useCallback(
     (_event: any, value: TValue | null) => {
@@ -183,7 +182,7 @@ function OptimaBarDropdown<TValue extends string>(
                 {/*</Box>*/}
               </ListDivider>
             ) : (
-              <Option key={_itemKey} value={_itemKey} label={label} disabled={disableAllExceptFirst && !!idx}>
+              <Option key={_itemKey} value={_itemKey} label={label}>
                 {/* Icon / Symbol */}
                 {decorator}
 

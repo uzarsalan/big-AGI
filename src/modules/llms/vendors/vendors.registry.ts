@@ -15,6 +15,7 @@ import { ModelVendorTogetherAI } from './togetherai/togetherai.vendor';
 import { ModelVendorXAI } from './xai/xai.vendor';
 
 import type { IModelVendor } from './IModelVendor';
+import { ModelVendorNexusAI } from './nexusai/nexusai.vendor';
 
 
 export type ModelVendorId =
@@ -26,6 +27,7 @@ export type ModelVendorId =
   | 'lmstudio'
   | 'localai'
   | 'mistral'
+  | 'nexusai'
   | 'ollama'
   | 'openai'
   | 'openpipe'
@@ -37,6 +39,7 @@ export type ModelVendorId =
 
 /** Global: Vendor Instances Registry **/
 const MODEL_VENDOR_REGISTRY: Record<ModelVendorId, IModelVendor> = {
+  nexusai: ModelVendorNexusAI,
   anthropic: ModelVendorAnthropic,
   azure: ModelVendorAzure,
   deepseek: ModelVendorDeepseek,

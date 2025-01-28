@@ -21,6 +21,11 @@ export const env = createEnv({
     OPENAI_API_HOST: z.string().url().optional(),
     OPENAI_API_ORG_ID: z.string().optional(),
 
+    // LLM: NexusAI
+    NEXUSAI_API_KEY: z.string().optional(),
+    NEXUSAI_API_HOST: z.string().url().optional(),
+    NEXUSAI_API_ORG_ID: z.string().optional(),
+
     // LLM: Azure OpenAI
     AZURE_OPENAI_API_ENDPOINT: z.string().url().optional(),
     AZURE_OPENAI_API_KEY: z.string().optional(),

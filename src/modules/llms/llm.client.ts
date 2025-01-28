@@ -15,290 +15,81 @@ import { findServiceAccessOrThrow } from './vendors/vendor.helpers';
 // LLM Model Updates Client Functions
 
 export async function llmsUpdateModelsForServiceOrThrow(serviceId: DModelsServiceId, keepUserEdits: boolean): Promise<{ models: ModelDescriptionSchema[] }> {
-
   // get the access, assuming there's no client config and the server will do all
   const { service, vendor, transportAccess } = findServiceAccessOrThrow(serviceId);
 
-  // fetch models
-  // const data = await vendor.rpcUpdateModelsOrThrow(transportAccess);
+  let data: {
+    models: ModelDescriptionSchema[];
+  } = { models: [] }
 
-  const data: { models: ModelDescriptionSchema[] } = {
-    "models": [
-      {
-        "id": "nexus-ai-agent",
-        "label": "Nexus Ai Agent",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "Latest gpt-4o snapshot from November 20th, 2024.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-vision",
-          "oai-chat-fn",
-          "oai-chat-json",
-          "oai-prompt-caching"
-        ],
-        "maxCompletionTokens": 16384,
-        "trainingDataCutoff": "Oct 2023",
-        "benchmark": {
-          "cbaElo": 1265
-        },
-        "chatPrice": {
-          "input": 2.5,
-          "output": 10,
-          "cache": {
-            "cType": "oai-ac",
-            "read": 1.25
-          }
+  if (serviceId === 'nexusai') {
+    data.models = [{
+      "id": "nexusai-agent",
+      "label": "Nexus Ai Agent",
+      "created": 1677649963,
+      "updated": 1677649963,
+      "description": "Nexus Ai Agent",
+      "contextWindow": 128000,
+      "interfaces": [
+        "oai-chat",
+        "oai-chat-vision",
+        "oai-chat-fn",
+        "oai-chat-json",
+        "oai-prompt-caching"
+      ],
+      "maxCompletionTokens": 16384,
+      "trainingDataCutoff": "Oct 2023",
+      "benchmark": {
+        "cbaElo": 1265
+      },
+      "chatPrice": {
+        "input": 2.5,
+        "output": 10,
+        "cache": {
+          "cType": "oai-ac",
+          "read": 1.25
         }
+      }
+    }, {
+      "id": "nexusai-simple",
+      "label": "Nexus Ai Simple",
+      "created": 1677649963,
+      "updated": 1677649963,
+      "description": "Nexus Ai Simple",
+      "contextWindow": 128000,
+      "interfaces": [
+        "oai-chat",
+        "oai-chat-vision",
+        "oai-chat-fn",
+        "oai-chat-json",
+        "oai-prompt-caching"
+      ],
+      "maxCompletionTokens": 16384,
+      "trainingDataCutoff": "Oct 2023",
+      "benchmark": {
+        "cbaElo": 1265
       },
-      {
-        "id": "o1-preview-2024-09-12",
-        "label": "КУКУ",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "Latest o1 model snapshot. This model takes longer to run and does not support streaming. New reasoning model for complex tasks that require broad general knowledge.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-reasoning",
-          "oai-prompt-caching",
-          "hotfix-strip-images",
-          "hotfix-sys0-to-usr0"
-        ],
-        "maxCompletionTokens": 32768,
-        "trainingDataCutoff": "Oct 2023",
-        "benchmark": {
-          "cbaElo": 1335
-        },
-        "chatPrice": {
-          "input": 15,
-          "output": 60,
-          "cache": {
-            "cType": "oai-ac",
-            "read": 7.5
-          }
+      "chatPrice": {
+        "input": 2.5,
+        "output": 10,
+        "cache": {
+          "cType": "oai-ac",
+          "read": 1.25
         }
-      },
-      {
-        "id": "o1-mini-2024-09-12",
-        "label": "o1 Mini (2024-09-12)",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "Latest o1-mini model snapshot. Fast, cost-efficient reasoning model tailored to coding, math, and science use cases.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-reasoning",
-          "oai-prompt-caching",
-          "hotfix-strip-images",
-          "hotfix-sys0-to-usr0"
-        ],
-        "maxCompletionTokens": 65536,
-        "trainingDataCutoff": "Oct 2023",
-        "benchmark": {
-          "cbaElo": 1314
-        },
-        "chatPrice": {
-          "input": 3,
-          "output": 12,
-          "cache": {
-            "cType": "oai-ac",
-            "read": 1.5
-          }
-        }
-      },
-      {
-        "id": "o1-2024-12-17",
-        "label": "o1 (2024-12-17)",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "Latest o1 model.",
-        "contextWindow": 200000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-fn",
-          "oai-chat-json",
-          "oai-chat-vision",
-          "oai-chat-reasoning",
-          "oai-prompt-caching",
-          "hotfix-no-stream"
-        ],
-        "parameterSpecs": [
-          {
-            "paramId": "llmVndOaiReasoningEffort"
-          }
-        ],
-        "maxCompletionTokens": 100000,
-        "trainingDataCutoff": "Oct 2023",
-        "benchmark": {
-          "cbaElo": 1336
-        },
-        "chatPrice": {
-          "input": 15,
-          "output": 60,
-          "cache": {
-            "cType": "oai-ac",
-            "read": 7.5
-          }
-        }
-      },
-      {
-        "id": "gpt-4o-mini-2024-07-18",
-        "label": "GPT-4o Mini (2024-07-18)",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "Affordable model for fast, lightweight tasks. GPT-4o Mini is cheaper and more capable than GPT-3.5 Turbo.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-vision",
-          "oai-chat-fn",
-          "oai-chat-json",
-          "oai-prompt-caching"
-        ],
-        "maxCompletionTokens": 16384,
-        "trainingDataCutoff": "Oct 2023",
-        "benchmark": {
-          "cbaElo": 1272
-        },
-        "chatPrice": {
-          "input": 0.15,
-          "output": 0.6,
-          "cache": {
-            "cType": "oai-ac",
-            "read": 0.075
-          }
-        }
-      },
-      {
-        "id": "gpt-4o-2024-08-06",
-        "label": "GPT-4o (2024-08-06)",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "First snapshot that supports Structured Outputs. gpt-4o currently points to this version.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-vision",
-          "oai-chat-fn",
-          "oai-chat-json",
-          "oai-prompt-caching"
-        ],
-        "maxCompletionTokens": 16384,
-        "trainingDataCutoff": "Oct 2023",
-        "benchmark": {
-          "cbaElo": 1264
-        },
-        "chatPrice": {
-          "input": 2.5,
-          "output": 10,
-          "cache": {
-            "cType": "oai-ac",
-            "read": 1.25
-          }
-        },
-        "hidden": true
-      },
-      {
-        "id": "gpt-4o-2024-05-13",
-        "label": "GPT-4o (2024-05-13)",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "Original gpt-4o snapshot from May 13, 2024.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-vision",
-          "oai-chat-fn",
-          "oai-chat-json"
-        ],
-        "maxCompletionTokens": 4096,
-        "trainingDataCutoff": "Oct 2023",
-        "benchmark": {
-          "cbaElo": 1285
-        },
-        "chatPrice": {
-          "input": 5,
-          "output": 15
-        },
-        "hidden": true
-      },
-      {
-        "id": "gpt-4-turbo-2024-04-09",
-        "label": "GPT-4 Turbo (2024-04-09)",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "GPT-4 Turbo with Vision model. Vision requests can now use JSON mode and function calling. gpt-4-turbo currently points to this version.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-vision",
-          "oai-chat-fn",
-          "oai-chat-json"
-        ],
-        "maxCompletionTokens": 4096,
-        "trainingDataCutoff": "Dec 2023",
-        "benchmark": {
-          "cbaElo": 1257
-        },
-        "chatPrice": {
-          "input": 10,
-          "output": 30
-        }
-      },
-      {
-        "id": "gpt-4-0125-preview",
-        "label": "GPT-4 Turbo (0125)",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "GPT-4 Turbo preview model intended to reduce cases of \"laziness\" where the model doesn't complete a task.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-fn",
-          "oai-chat-json"
-        ],
-        "maxCompletionTokens": 4096,
-        "trainingDataCutoff": "Dec 2023",
-        "benchmark": {
-          "cbaElo": 1251
-        },
-        "chatPrice": {
-          "input": 10,
-          "output": 30
-        },
-        "hidden": true
-      },
-      {
-        "id": "gpt-4-1106-preview",
-        "label": "GPT-4 Turbo (1106)",
-        "created": 1677649963,
-        "updated": 1677649963,
-        "description": "GPT-4 Turbo preview model featuring improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more.",
-        "contextWindow": 128000,
-        "interfaces": [
-          "oai-chat",
-          "oai-chat-fn",
-          "oai-chat-json"
-        ],
-        "maxCompletionTokens": 4096,
-        "trainingDataCutoff": "Apr 2023",
-        "benchmark": {
-          "cbaElo": 1251
-        },
-        "chatPrice": {
-          "input": 10,
-          "output": 30
-        },
-        "hidden": true
-      },
-    ]
+      }
+    }]
+  } else {
+    // fetch models
+    const { models } = await vendor.rpcUpdateModelsOrThrow(transportAccess);
+    data.models = models;
   }
+
+
 
   // update the global models store
   llmsStoreActions().setLLMs(
-    data.models.map((model, index) => ({ ...model, label: index ? (model.label + ' Coming Soon') : model.label }))
+    data.models
+      // .map((model, index) => ({ ...model, label: index > 1 ? (model.label + ' Coming Soon') : model.label }))
       .map(model => _createDLLMFromModelDescription(model, service)),
     service.id,
     true,

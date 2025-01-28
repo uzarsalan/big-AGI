@@ -568,6 +568,9 @@ const openAIModelsDenyList: string[] = [
 
   // Moderation models
   'omni-moderation-latest', 'omni-moderation-2024-09-26',
+  
+  // remove nexusai
+  'nexusai-agent', 'nexusai-simple'
 ];
 
 export function openAIModelFilter(model: OpenAIWire_API_Models_List.Model) {

@@ -401,8 +401,9 @@ function _heuristicUpdateSelectedLLMs(allLlms: DLLM[], chatLlmId: DLLMId | null,
   //   chatLlmId = vendors.length ? vendors[0].llmsByElo[0].id : null;
   // }
 
-
-  chatLlmId = 'openai-nexus-ai-agent'
+  if (!chatLlmId || !allLlms.find(llm => llm.id === chatLlmId)) {
+    chatLlmId = 'nexusai-nexusai-agent'
+  }
 
   // default Fast: vendors by Elo, lowest cost (if available)
   if (!fastLlmId || !allLlms.find(llm => llm.id === fastLlmId)) {

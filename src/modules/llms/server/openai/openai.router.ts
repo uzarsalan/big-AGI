@@ -24,7 +24,7 @@ import { xaiModelDescriptions, xaiModelSort } from './models/xai.models';
 
 
 const openAIDialects = z.enum([
-  'azure', 'deepseek', 'groq', 'lmstudio', 'localai', 'mistral', 'openai', 'openpipe', 'openrouter', 'perplexity', 'togetherai', 'xai',
+  'azure', 'deepseek', 'groq', 'lmstudio', 'localai', 'mistral', 'nexusai', 'openai', 'openpipe', 'openrouter', 'perplexity', 'togetherai', 'xai',
 ]);
 export type OpenAIDialects = z.infer<typeof openAIDialects>;
 
@@ -180,6 +180,19 @@ export const llmOpenAIRouter = createTRPCRouter({
           models = openAIModels
             .map(mistralModelToModelDescription)
             .sort(mistralModelsSort);
+          break;
+
+        case 'nexusai':
+          models = openAIModels
+
+            // limit to only 'gpt' and 'non instruct' models
+            .filter(({ id }) => id.includes('nexusai'))
+
+            // to model description
+            .map((model): ModelDescriptionSchema => openAIModelToModelDescription(model.id, model.created))
+
+            // custom OpenAI sort
+            .sort(openAISortModels);
           break;
 
         // [OpenAI]: chat-only models, custom sort, manual mapping
@@ -344,8 +357,10 @@ const DEFAULT_TOGETHERAI_HOST = 'https://api.together.xyz';
 const DEFAULT_XAI_HOST = 'https://api.x.ai';
 
 export function openAIAccess(access: OpenAIAccessSchema, modelRefId: string | null, apiPath: string): { headers: HeadersInit, url: string } {
+  let oaiKey = null;
+  let oaiOrg = null;
+  let host = null;
   switch (access.dialect) {
-
     case 'azure':
       const azureKey = access.oaiKey || env.AZURE_OPENAI_API_KEY || '';
       const azureHost = fixupHost(access.oaiHost || env.AZURE_OPENAI_API_ENDPOINT || '', apiPath);
@@ -388,10 +403,15 @@ export function openAIAccess(access: OpenAIAccessSchema, modelRefId: string | nu
 
 
     case 'lmstudio':
+    case 'nexusai':
+      oaiKey = env.NEXUSAI_API_KEY || ''
+      oaiOrg = env.NEXUSAI_API_KEY || ''
+      host = env.NEXUSAI_API_HOST || ''
     case 'openai':
-      const oaiKey = access.oaiKey || env.OPENAI_API_KEY || '';
-      const oaiOrg = access.oaiOrg || env.OPENAI_API_ORG_ID || '';
-      let oaiHost = fixupHost(access.oaiHost || env.OPENAI_API_HOST || DEFAULT_OPENAI_HOST, apiPath);
+      oaiKey ??= access.oaiKey || env.OPENAI_API_KEY || '';
+      oaiOrg ??= access.oaiOrg || env.OPENAI_API_ORG_ID || '';
+      host ??= access.oaiHost || env.OPENAI_API_HOST || DEFAULT_OPENAI_HOST
+      let oaiHost = fixupHost(host, apiPath);
       // warn if no key - only for default (non-overridden) hosts
       if (!oaiKey && oaiHost.indexOf(DEFAULT_OPENAI_HOST) !== -1)
         throw new Error('Missing OpenAI API Key. Add it on the UI (Models Setup) or server side (your deployment).');

@@ -80,6 +80,7 @@ export function createChatGenerateDispatch(access: AixAPI_Access, model: AixAPI_
     case 'lmstudio':
     case 'localai':
     case 'mistral':
+    case 'nexusai':
     case 'openai':
     case 'openpipe':
     case 'openrouter':

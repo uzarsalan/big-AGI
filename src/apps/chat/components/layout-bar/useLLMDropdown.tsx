@@ -103,13 +103,6 @@ function LLMDropdown(props: {
     return (stabilizeLlmOptions.current = llmItems);
   }, [chatLlmId, llms, filterString]);
 
-  // REPLACED ITEMS
-  // const nexusDropdownItems: OptimaDropdownItems = {
-  //   'nexus-ai-agent': {
-  //     title: 'Nexus Ai Agent',
-  //   },
-  // };
-
   // "Model Options" button (only on the active item)
   const llmDropdownButton = React.useMemo(
     () => (
@@ -196,7 +189,6 @@ function LLMDropdown(props: {
       onChange={handleChatLLMChange}
       placeholder={props.placeholder || 'Models …'}
       prependOption={llmDropdownPrependOptions}
-      disableAllExceptFirst
       // appendOption={llmDropdownAppendOptions}
       // activeEndDecorator={llmDropdownButton}
     />

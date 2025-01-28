@@ -19,7 +19,7 @@ export const aixRouter = createTRPCRouter({
   chatGenerateContent: publicProcedure
     .input(z.object({
       access: AixWire_API.Access_schema,
-      model: AixWire_API.Model_schema.optional(),
+      model: AixWire_API.Model_schema,
       chatGenerate: AixWire_API_ChatContentGenerate.Request_schema,
       context: AixWire_API.ContextChatGenerate_schema,
       streaming: z.boolean(),
@@ -31,10 +31,18 @@ export const aixRouter = createTRPCRouter({
       // Intake derived state
       const intakeAbortSignal = ctx.reqSignal;
       let { access, model, chatGenerate, streaming, connectionOptions } = input;
-      model = {
-        "id": "gpt-4o-2024-11-20",
-        "temperature": 0.5,
-        "maxTokens": 16384
+      if (model?.id === "nexusai-agent") {
+        model = {
+          "id": "gpt-4o-2024-11-20",
+          "temperature": 0.5,
+          "maxTokens": 16384
+        }
+      } else if (model?.id === "nexusai-simple") {
+        model = {
+          "id": "gpt-4o-mini-2024-07-18",
+          "temperature": 0.5,
+          "maxTokens": 16384
+        }
       }
       const systemMessage = "always say No"
       if (chatGenerate.systemMessage?.parts) {
@@ -50,7 +58,6 @@ export const aixRouter = createTRPCRouter({
           }]
         }
       }
-      console.log(chatGenerate)
       const accessDialect = access.dialect;
       const prettyDialect = serverCapitalizeFirstLetter(accessDialect);
 
@@ -62,6 +69,7 @@ export const aixRouter = createTRPCRouter({
       // Prepare the dispatch requests
       let dispatch: ReturnType<typeof createChatGenerateDispatch>;
       try {
+        console.log(model)
         dispatch = createChatGenerateDispatch(access, model, chatGenerate, streaming);
       } catch (error: any) {
         chatGenerateTx.setRpcTerminatingIssue('dispatch-prepare', `**[AIX Configuration Issue] ${prettyDialect}**: ${safeErrorString(error) || 'Unknown service preparation error'}`, false);
@@ -91,6 +99,7 @@ export const aixRouter = createTRPCRouter({
         });
 
       } catch (error: any) {
+        console.log(error)
         // Handle expected dispatch abortion while the first fetch hasn't even completed
         if (error && error?.name === 'TRPCError' && intakeAbortSignal.aborted) {
           chatGenerateTx.setEnded('done-dispatch-aborted');

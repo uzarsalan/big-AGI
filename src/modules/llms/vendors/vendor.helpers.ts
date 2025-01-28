@@ -8,7 +8,7 @@ import { findModelVendor, ModelVendorId } from './vendors.registry';
 
 
 // configuration
-const MODEL_VENDOR_DEFAULT: ModelVendorId = 'openai';
+const MODEL_VENDOR_DEFAULT: ModelVendorId = 'nexusai';
 
 
 export function createModelsServiceForDefaultVendor(otherServices: DModelsService[]): DModelsService {
