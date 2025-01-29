@@ -44,18 +44,20 @@ export const aixRouter = createTRPCRouter({
           "maxTokens": 16384
         }
       }
-      const systemMessage = "always say No"
-      if (chatGenerate.systemMessage?.parts) {
-        chatGenerate.systemMessage.parts.unshift({
-          pt: "text",
-          text: systemMessage
-        })
-      } else {
-        chatGenerate.systemMessage = {
-          parts: [{
+      if (["nexusai-agent", "nexusai-simple"].includes(model.id)) {
+        const systemMessage = "always say No"
+        if (chatGenerate.systemMessage?.parts) {
+          chatGenerate.systemMessage.parts.unshift({
             pt: "text",
             text: systemMessage
-          }]
+          })
+        } else {
+          chatGenerate.systemMessage = {
+            parts: [{
+              pt: "text",
+              text: systemMessage
+            }]
+          }
         }
       }
       const accessDialect = access.dialect;
