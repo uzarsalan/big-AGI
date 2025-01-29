@@ -55,7 +55,7 @@ export async function llmsUpdateModelsForServiceOrThrow(serviceId: DModelsServic
       "label": "Nexus Ai Simple",
       "created": 1677649963,
       "updated": 1677649963,
-      "description": "Nexus Ai Simple",
+      "description": "Affordable model for fast, lightweight tasks. GPT-4o Mini is cheaper and more capable than GPT-3.5 Turbo.",
       "contextWindow": 128000,
       "interfaces": [
         "oai-chat",
@@ -67,14 +67,14 @@ export async function llmsUpdateModelsForServiceOrThrow(serviceId: DModelsServic
       "maxCompletionTokens": 16384,
       "trainingDataCutoff": "Oct 2023",
       "benchmark": {
-        "cbaElo": 1265
+        "cbaElo": 1272
       },
       "chatPrice": {
-        "input": 2.5,
-        "output": 10,
+        "input": 0.15,
+        "output": 0.6,
         "cache": {
           "cType": "oai-ac",
-          "read": 1.25
+          "read": 0.075
         }
       }
     }]
@@ -82,6 +82,7 @@ export async function llmsUpdateModelsForServiceOrThrow(serviceId: DModelsServic
     // fetch models
     const { models } = await vendor.rpcUpdateModelsOrThrow(transportAccess);
     data.models = models;
+    console.log(data.models)
   }
 
 

@@ -1,4 +1,4 @@
-import { OpenAIIcon } from '~/common/components/icons/vendors/OpenAIIcon';
+import { NexusAIIcon } from '~/common/components/icons/vendors/NexusAIIcon';
 import { apiAsync } from '~/common/util/trpc.client';
 
 import type { IModelVendor } from '../IModelVendor';
@@ -26,7 +26,7 @@ export const ModelVendorNexusAI: IModelVendor<DOpenAIServiceSettings, OpenAIAcce
   hasBackendCapKey: 'hasLlmNexusAI',
 
   // components
-  Icon: OpenAIIcon,
+  Icon: NexusAIIcon,
   ServiceSetupComponent: NexusAiServiceSetup,
 
   // functions
